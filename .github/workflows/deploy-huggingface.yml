@@ -19,4 +19,4 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git push https://alifyadhiva:$HF_TOKEN@huggingface.co/spaces/alifyadhiva/mineral_classification_demo main
+          git push https://alifyadhiva:$HF_TOKEN@huggingface.co/spaces/alifya/mineral_classification_demo main
