@@ -1,0 +1,6 @@
+app:
+  title: "Pengenalan Gambar Mineral"
+  image_size: [300, 300]
+
+model:
+  path: "models/best.pt"
