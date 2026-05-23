@@ -12,19 +12,34 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Install Hugging Face Hub
         run: |
           pip install -U huggingface_hub
 
-      - name: Upload to Hugging Face Space
+      - name: Prepare Space files
+        run: |
+          mkdir -p space/models space/configs
+          cp app.py space/app.py
+          cp README.md space/README.md
+          cp requirements.txt space/requirements.txt
+          cp models/best.pt space/models/best.pt
+          cp configs/app.yaml space/configs/app.yaml
+
+      - name: Upload folder to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          hf upload alifya/mineral_classification_demo app.py app.py --repo-type space --token "$HF_TOKEN"
-          hf upload alifya/mineral_classification_demo requirements.txt requirements.txt --repo-type space --token "$HF_TOKEN"
-          hf upload alifya/mineral_classification_demo README.md README.md --repo-type space --token "$HF_TOKEN"
-          hf upload alifya/mineral_classification_demo models/best.pt models/best.pt --repo-type space --token "$HF_TOKEN"
-          hf upload alifya/mineral_classification_demo configs/app.yaml configs/app.yaml --repo-type space --token "$HF_TOKEN"
+          python - <<'PY'
+          import os
+          from huggingface_hub import HfApi
+
+          api = HfApi(token=os.environ["HF_TOKEN"])
+
+          api.upload_folder(
+              folder_path="space",
+              repo_id="alifya/mineral_classification_demo",
+              repo_type="space",
+              commit_message="Deploy Space from GitHub Actions",
+          )
+          PY
