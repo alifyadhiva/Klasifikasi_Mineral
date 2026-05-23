@@ -3,8 +3,8 @@ title: Mineral Classification Demo
 emoji: 🪨
 colorFrom: blue
 colorTo: green
-sdk: gradio
-sdk_version: "5.0.0"
+sdk: streamlit
+python_version: "3.10"
 app_file: app.py
 pinned: false
 ---
