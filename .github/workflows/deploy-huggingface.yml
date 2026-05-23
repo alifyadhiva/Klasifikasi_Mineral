@@ -23,10 +23,8 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          hf upload alifya/mineral_classification_demo . . \
-            --repo-type space \
-            --token "$HF_TOKEN" \
-            --exclude ".git/*" \
-            --exclude ".github/*" \
-            --exclude "__pycache__/*" \
-            --exclude "*.pyc"
+          hf upload alifya/mineral_classification_demo app.py app.py --repo-type space --token "$HF_TOKEN"
+          hf upload alifya/mineral_classification_demo requirements.txt requirements.txt --repo-type space --token "$HF_TOKEN"
+          hf upload alifya/mineral_classification_demo README.md README.md --repo-type space --token "$HF_TOKEN"
+          hf upload alifya/mineral_classification_demo models/best.pt models/best.pt --repo-type space --token "$HF_TOKEN"
+          hf upload alifya/mineral_classification_demo configs/app.yaml configs/app.yaml --repo-type space --token "$HF_TOKEN"
