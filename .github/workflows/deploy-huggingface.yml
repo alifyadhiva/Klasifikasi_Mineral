@@ -24,11 +24,8 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          python -m huggingface_hub.commands.huggingface_cli upload \
-            alifya/mineral_classification_demo \
-            . \
-            . \
-            --repo-type=space \
+          hf upload alifya/mineral_classification_demo . . \
+            --repo-type space \
             --token "$HF_TOKEN" \
             --exclude ".git/*" \
             --exclude ".github/*" \
