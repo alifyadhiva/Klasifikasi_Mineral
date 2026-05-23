@@ -1,3 +1,20 @@
+---
+title: Mineral Classification Demo
+emoji: 🪨
+colorFrom: blue
+colorTo: green
+sdk: gradio
+sdk_version: "5.0.0"
+app_file: app.py
+pinned: false
+---
+
+# Mineral Classification Demo
+
+Deep learning-based mineral classification system for identifying common minerals from image data.
+
+Currently, the demo version can accurately classify 7 mineral types: biotite, malachite, muscovite, pyrite, quartz, bornite, and chrysocolla.
+
 # Mineral Klasifikasi
 
 Aplikasi Streamlit untuk klasifikasi gambar mineral menggunakan model Ultralytics YOLO classification.
