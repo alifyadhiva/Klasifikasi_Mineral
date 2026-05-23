@@ -19,12 +19,22 @@ jobs:
 
       - name: Prepare Space files
         run: |
+          test -f app.py
+          test -f README.md
+          test -f requirements.txt
+          test -f models/best.pt
+          test -f configs/app.yaml
+          test -d mineral_classifier
+
+          rm -rf space
           mkdir -p space/models space/configs
+
           cp app.py space/app.py
           cp README.md space/README.md
           cp requirements.txt space/requirements.txt
           cp models/best.pt space/models/best.pt
           cp configs/app.yaml space/configs/app.yaml
+          cp -r mineral_classifier space/mineral_classifier
 
       - name: Upload folder to Hugging Face Space
         env:
@@ -35,11 +45,10 @@ jobs:
           from huggingface_hub import HfApi
 
           api = HfApi(token=os.environ["HF_TOKEN"])
-
           api.upload_folder(
               folder_path="space",
               repo_id="alifya/mineral_classification_demo",
               repo_type="space",
-              commit_message="Deploy Space from GitHub Actions",
+              commit_message="Deploy Streamlit mineral classifier",
           )
           PY
