@@ -14,9 +14,23 @@ jobs:
         uses: actions/checkout@v4
         with:
           lfs: true
+          fetch-depth: 0
 
-      - name: Push to Hugging Face Space
+      - name: Install Hugging Face Hub
+        run: |
+          pip install -U huggingface_hub
+
+      - name: Upload to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git push --force https://alifya:$HF_TOKEN@huggingface.co/spaces/alifya/mineral_classification_demo main
+          python -m huggingface_hub.commands.huggingface_cli upload \
+            alifya/mineral_classification_demo \
+            . \
+            . \
+            --repo-type=space \
+            --token "$HF_TOKEN" \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --exclude "__pycache__/*" \
+            --exclude "*.pyc"
