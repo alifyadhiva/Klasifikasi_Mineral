@@ -10,45 +10,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout GitHub repo
         uses: actions/checkout@v4
 
-      - name: Install Hugging Face Hub
+      - name: Install Git LFS
         run: |
-          pip install -U huggingface_hub
+          sudo apt-get update
+          sudo apt-get install -y git-lfs rsync
+          git lfs install
 
-      - name: Prepare Space files
-        run: |
-          test -f app.py
-          test -f README.md
-          test -f requirements.txt
-          test -f models/best.pt
-          test -f configs/app.yaml
-          test -d mineral_classifier
-
-          rm -rf space
-          mkdir -p space/models space/configs
-
-          cp app.py space/app.py
-          cp README.md space/README.md
-          cp requirements.txt space/requirements.txt
-          cp models/best.pt space/models/best.pt
-          cp configs/app.yaml space/configs/app.yaml
-          cp -r mineral_classifier space/mineral_classifier
-
-      - name: Upload folder to Hugging Face Space
+      - name: Deploy to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          python - <<'PY'
-          import os
-          from huggingface_hub import HfApi
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
 
-          api = HfApi(token=os.environ["HF_TOKEN"])
-          api.upload_folder(
-              folder_path="space",
-              repo_id="alifya/mineral_classification_demo",
-              repo_type="space",
-              commit_message="Deploy Streamlit mineral classifier",
-          )
-          PY
+          git clone https://alifya:${HF_TOKEN}@huggingface.co/spaces/alifya/mineral_classification_demo hf_space
+
+          rsync -av --delete \
+            --exclude ".git" \
+            --exclude ".github" \
+            --exclude "hf_space" \
+            app.py README.md requirements.txt mineral_classifier configs models hf_space/
+
+          cd hf_space
+
+          git lfs track "*.pt"
+          git add .gitattributes
+          git add .
+
+          git commit -m "Deploy mineral classification app" || echo "No changes to commit"
+
+          git push origin main
