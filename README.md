@@ -72,9 +72,3 @@ streamlit run app.py
 ruff check .
 pytest
 ```
-
-## Catatan ML Engineering
-
-- File model besar seperti `best.pt` sebaiknya tidak disimpan langsung di Git.
-- Simpan dataset dan model artifact di storage terpisah, misalnya DVC, MLflow, Google Drive, S3, atau Hugging Face Hub.
-- Tambahkan laporan training berisi sumber dataset, pembagian train/validation/test, metrik evaluasi, confusion matrix, dan versi model.
